@@ -1,11 +1,23 @@
-Q1: Your HomeController is not a resource controller. Name two things an index() on a resource controller does that yours does not have to.
+Q1: Authentication and authorisation are not the same. In one sentence each: what did this lesson give you, and what is still missing next meeting?
 
-Answer:A resource controller's index() has to load and show a list of records from one table, like all my movies, with paging and filters. It is also one of the seven actions made by Route::resource, so it must use the fixed address /movies and the name movies.index. My HomeController only shows a front page with two counts, so it has to do neither of these, and I chose its address / and its name home myself.
+Answer: This lesson gave my Movie Flex app authentication, which means it now knows who the user is, because they can register, login and logout. What is still missing is authorisation, which means checking what each user is allowed to do, because right now any signed in user can edit or delete any movie.
 
-Q2: Your pagination links lost the search term until you added one method. Say what those links contained before, and what the controller therefore received.
+Q2: Why does a successful login call session()->regenerate()? What goes wrong if you skip it?
 
-Answer: Before I added withQueryString(), the page links only had the page number, like /movies?page=2. So the controller only got page=2 and no search value. It thought there was no search and showed the full list, with the search box empty screenshot 12. 
+Answer: session()->regenerate() gives the user a brandnew session id right after they log in. If I skip it, an attacker could give me a session id before I log in, and after I log in they could use that same id to act as me.
 
-Q3: A misspelled sort value does not break your page. Explain why that is worse than an error, and what your allowed list does about it.
+Q3: Why does a failed login use the same message for a wrong password and an unknown email?
 
-Answer: When the sort value is misspelled, like ?sort=titl, SQLite does not show an error. The page loads but nothing is sorted, so nobody notices or reports the problem, and on another database the same address could break the page. My allowed list checks the value against title, year and rating, and if it is not one of them, it uses title instead, so the list is always sorted correctly.
+Answer: Stranger could type any email and find out which ones are registered in my app. With the same message for both, they only learn that the login failed, not why. That makes it harder for someone to guess real accounts.
+
+Q4: Why do index and show stay public while create/edit/update/destroy use auth?
+
+Answer: Anyone should be able to browse my movie list and open a movie's details, so index and show stay public. Creating, editing, updating and deleting change the data in my app, so those use auth and only signed-in users can reach them.
+
+Q5: You hid Add (and actions) for guests. Why is that not enough to secure those actions? What actually stops a stranger?
+
+Answer: Hiding the Add, Edit and Delete buttons only changes what a guest can see. The addresses still exist, so a guest can type /movies/create straight into the browser. The auth middleware on those routes is what really stops them, because it sends them to the login page.
+
+Q6: In screenshot 20 the route name was wrong. Why does auth middleware care that the route is named exactly login?
+
+Answer: When a guest opens a locked page, the auth middleware sends them to the route named exactly login. When I renamed it to signin, the middleware could not find any route called login, so the page crashed with "Route [login] not defined".

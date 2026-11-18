@@ -33,7 +33,6 @@ class MovieController extends Controller
             $query = $query->where('title', 'like', "%{$search}%");
         }
 
-
         if ($genre_id) {
             $query = $query->where('genre_id', $genre_id);
         }
@@ -48,7 +47,7 @@ class MovieController extends Controller
 
         $movies = $query->orderBy($sort)->paginate(5)->withQueryString();
 
-        return view('movies.index', compact('movies', 'genres', 'genre_id', 'year'));
+        return view('movies.index', compact('movies', 'genres'));
     }
     /**
      * Show the form for creating a new resource.

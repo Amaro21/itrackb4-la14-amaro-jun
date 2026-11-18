@@ -1,4 +1,4 @@
-@extends('layouts.app')
+{{-- @extends('layouts.app')
 @section('title', $movie['title'] . ' - Details')
 @section('content')
     <h2>Movie Details</h2>
@@ -15,4 +15,29 @@
             </ul>
         </div>
     </div>
+@endsection
+ --}}
+@extends('layouts.app')
+@section('title', $movie->title . ' - Details')
+@section('content')
+
+    <div class="card shadow-sm mx-auto" style="max-width: 500px">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">{{ $movie->title }}</h4>
+        </div>
+
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">Genre: {{ $movie->genre->name }}</li>
+            <li class="list-group-item">Rating: {{ $movie->rating }}</li>
+            <li class="list-group-item">Year: {{ $movie->year }}</li>
+            <li class="list-group-item">Blockbuster: {{ $movie->is_blockbuster ? 'Yes' : 'No' }}</li>
+            <li class="list-group-item">Director: {{ $movie->director }}</li>
+        </ul>
+
+        <div class="card-body">
+            <a href="{{ route('movies.index') }}" class="btn btn-secondary">Back</a>
+            <a href="{{ route('movies.edit', $movie) }}" class="btn btn-primary">Edit</a>
+        </div>
+    </div>
+
 @endsection
